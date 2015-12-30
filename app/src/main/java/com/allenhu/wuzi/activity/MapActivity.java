@@ -43,6 +43,7 @@ public class MapActivity extends BaseActivity implements OnGetGeoCoderResultList
     private BaiduMap mBaiduMap;
     private List<Station> dataList = null;
 
+    private BDLocation currentLocation;
     private BitmapDescriptor selectorDescriptor = null;
     private BitmapDescriptor normalDescriptor = null;
     private Marker lastMarker;
@@ -170,18 +171,14 @@ public class MapActivity extends BaseActivity implements OnGetGeoCoderResultList
 
         Button button = new Button(getApplicationContext());
         button.setBackgroundResource(R.mipmap.popup);
-        
+
         button.setText(result.getAddress());
         button.setTextColor(getResources().getColor(R.color.brown));
-        //定义用于显示该InfoWindow的坐标点
-//            LatLng pt = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
         LatLng pt = result.getLocation();
         //创建InfoWindow , 传入 view， 地理坐标， y 轴偏移量
         InfoWindow mInfoWindow = new InfoWindow(button, pt, -47);
         //显示InfoWindow
         mBaiduMap.showInfoWindow(mInfoWindow);
-
-//        Toast.makeText(MapActivity.this, result.getAddress(), Toast.LENGTH_LONG).show();
     }
 
     /**
@@ -195,6 +192,7 @@ public class MapActivity extends BaseActivity implements OnGetGeoCoderResultList
             if (location == null || mapView == null) {
                 return;
             }
+            currentLocation = location;
             MyLocationData locData = new MyLocationData.Builder()
                     .accuracy(location.getRadius())
                             // 此处设置开发者获取到的方向信息，顺时针0-360
